@@ -179,12 +179,12 @@ def chair_base(img, p, q, leather):
         a = k * 2 * math.pi / 5 + 0.3
         dx, dy = math.cos(a), math.sin(a); ox, oy = -dy * 0.022, dx * 0.022
         leg = [(p + ox, q + oy), (p + dx * 0.32 + ox, q + dy * 0.32 + oy), (p + dx * 0.32 - ox, q + dy * 0.32 - oy), (p - ox, q - oy)]
-        img = extrude(img, leg, 0.07, 0.10, (175, 175, 178), spec=0.4)
+        img = extrude(img, leg, 0.07, 0.10, (128, 128, 132), spec=0.3)
         wx, wy = p + dx * 0.32, q + dy * 0.32
         circ = [(wx + 0.03 * math.cos(t), wy + 0.03 * math.sin(t)) for t in np.linspace(0, 2 * math.pi, 12, endpoint=False)]
         img = extrude(img, circ, 0.0, 0.06, (30, 30, 32))
     col = [(p - .025, q - .025), (p + .025, q - .025), (p + .025, q + .025), (p - .025, q + .025)]
-    img = extrude(img, col, 0.10, 0.50, (190, 190, 192), spec=0.5)
+    img = extrude(img, col, 0.10, 0.50, (140, 140, 144), spec=0.3)
     seat = [(p + 0.23 * math.cos(t), q + 0.22 * math.sin(t)) for t in np.linspace(0, 2 * math.pi, 16, endpoint=False)]
     img = extrude(img, seat, 0.50, 0.57, leather)
     return img
@@ -233,18 +233,9 @@ def put(img, spr_m, p, q, width_m, z=0.75, mirror=False):
 
 # ---------------- scene ----------------
 # rugs (layered)
-img = place_rug(img, rug1, 0.62, 2.25, 0.30, 2.05)
-img = place_rug(img, rug2, 1.85, 3.06, 0.20, 1.90)
+img = place_rug(img, rug1, 0.62, 2.30, 0.30, 2.30)
+img = place_rug(img, rug2, 1.95, 3.20, 0.15, 1.95)
 
-# desk A: against back wall, facing camera (glass legs + walnut modesty panel), chair behind
-A = dict(p0=0.62, p1=1.80, q0=0.85, q1=1.60)
-img = shadow(img, [P(A["p1"] + .05, A["q0"] - .05), P(A["p0"] - .05, A["q0"] - .05), P(A["p0"] - .05, A["q1"] + .08), P(A["p1"] + .05, A["q1"] + .08)], 0.35, 16)
-img = chair_base(img, 1.21, 0.42, leather)
-img = chair(img, 1.21, 0.42)
-img = box(img, A["p0"] + .02, A["p0"] + .034, A["q0"] + .03, A["q1"] - .03, 0.0, 0.70, kind="glass")
-img = box(img, A["p1"] - .034, A["p1"] - .02, A["q0"] + .03, A["q1"] - .03, 0.0, 0.70, kind="glass")
-img = box(img, A["p0"] + .04, A["p1"] - .04, A["q1"] - .07, A["q1"] - .05, 0.28, 0.70, kind="wood", seed=11)
-img = box(img, A["p0"], A["p1"], A["q0"], A["q1"], 0.70, 0.75, kind="wood", seed=5)
 import math
 def rect(pc, qc, w, d, ang):
     ca, sa = math.cos(ang), math.sin(ang)
@@ -256,25 +247,39 @@ def books(img, pc, qc, ang, cols, z=0.75):
 def vase(img, pc, qc, r=0.065, hgt=0.22, col=(58, 62, 68), z=0.75):
     poly = [(pc + r * math.cos(t), qc + r * math.sin(t)) for t in np.linspace(0, 2 * math.pi, 20, endpoint=False)]
     return extrude(img, poly, z, z + hgt, col)
-img = extrude(img, rect(1.25, 1.12, 0.32, 0.22, 0.08), 0.75, 0.768, (178, 180, 184), spec=0.3)
-img = books(img, 0.86, 1.05, -0.15, [(198, 214, 226), (78, 96, 92)])
+def W(img, p0, p1, q0, q1, z0, z1, seed, along="p"):
+    return box(img, p0, p1, q0, q1, z0, z1, kind="wood", seed=seed, along=along)
+def G(img, p0, p1, q0, q1, z0, z1):
+    return box(img, p0, p1, q0, q1, z0, z1, kind="glass")
 
-# chair B tucked toward desk B (drawn first so the desk hides its lower part)
-img = shadow(img, [P(2.55, 0.62), P(2.0, 0.62), P(2.0, 1.22), P(2.55, 1.22)], 0.25, 14)
-img = chair_base(img, 2.27, 0.92, leather)
-img = chair(img, 2.27, 0.92, mirror=True)
+# ---------- desk A (same model as your original, wing on the stair side): walnut top, glass leg, drawer + wing ----------
+img = shadow(img, [P(2.07, 0.80), P(0.57, 0.80), P(0.57, 2.22), P(1.12, 2.22), P(1.12, 1.68), P(2.07, 1.68)], 0.33, 16)
+img = chair_base(img, 1.42, 0.42, leather)
+img = chair(img, 1.42, 0.42)
+img = G(img, 1.985, 2.00, 0.88, 1.57, 0.0, 0.70)                 # glass leg, left end
+img = W(img, 0.64, 1.07, 0.88, 2.12, 0.50, 0.70, 31, along="q")    # long drawer box under top + wing
+img = W(img, 0.62, 1.07, 1.62, 2.15, 0.0, 0.06, 32, along="q")     # floor plinth of the wing
+img = G(img, 0.65, 1.04, 2.115, 2.13, 0.06, 0.50)                  # glass end of the wing
+img = W(img, 0.62, 2.02, 0.85, 1.60, 0.70, 0.75, 33)               # main top
+img = W(img, 0.62, 1.07, 1.60, 2.15, 0.70, 0.75, 34, along="q")    # wing top
+img = extrude(img, rect(1.45, 1.15, 0.32, 0.22, -0.06), 0.75, 0.768, (178, 180, 184), spec=0.3)
+img = books(img, 0.85, 1.92, -0.25, [(198, 214, 226), (78, 96, 92)])
 
-# desk B (left side, walnut waterfall), user faces the left wall
-B = dict(p0=2.46, p1=3.04, q0=0.30, q1=1.55)
-img = shadow(img, [P(B["p1"], B["q0"] - .04), P(B["p0"] - .05, B["q0"] - .04), P(B["p0"] - .05, B["q1"] + .05), P(B["p1"], B["q1"] + .05)], 0.35, 14)
-img = box(img, B["p0"], B["p1"], B["q0"], B["q0"] + .04, 0.0, 0.70, kind="wood", seed=21, along="q")
-img = box(img, B["p0"], B["p1"], B["q1"] - .04, B["q1"], 0.0, 0.70, kind="wood", seed=22, along="q")
-img = box(img, B["p0"] + 0.05, B["p1"] - 0.02, B["q0"] + .04, B["q1"] - .04, 0.54, 0.70, kind="wood", seed=23, along="q")
-img = box(img, B["p0"], B["p1"], B["q0"], B["q1"], 0.70, 0.75, kind="wood", seed=24, along="q")
-img = books(img, 2.76, 1.22, 0.2, [(70, 98, 150), (200, 214, 224), (60, 70, 80)])
-img = vase(img, 2.80, 0.55)
+# ---------- desk B: same model, along the left side; user sits on the wall side facing the room ----------
+img = shadow(img, [P(2.77, 0.30), P(2.05, 0.30), P(2.05, 1.60), P(3.25, 1.60), P(3.25, 1.00), P(2.77, 1.00)], 0.33, 16)
+img = G(img, 2.13, 2.69, 0.37, 0.385, 0.0, 0.70)                  # glass leg, back end
+img = W(img, 2.12, 2.70, 1.05, 1.53, 0.50, 0.70, 41)               # drawer under main top, near end
+img = W(img, 2.10, 2.72, 0.35, 1.55, 0.70, 0.75, 43, along="q")    # main top
+img = chair_base(img, 2.97, 0.76, leather)
+img = chair(img, 2.97, 0.76, mirror=False)
+img = W(img, 2.72, 3.20, 1.05, 1.55, 0.0, 0.06, 44)                # wing plinth
+img = W(img, 2.72, 3.18, 1.07, 1.53, 0.50, 0.70, 45)               # wing drawer
+img = G(img, 3.18, 3.195, 1.08, 1.52, 0.06, 0.50)                  # wing glass end
+img = W(img, 2.72, 3.20, 1.05, 1.55, 0.70, 0.75, 46)               # wing top
+img = books(img, 2.42, 1.30, 0.15, [(70, 98, 150), (200, 214, 224), (60, 70, 80)])
+img = vase(img, 2.40, 0.55)
 
-out = np.clip(img, 0, 255).astype(np.uint8)
+out = np.clip(np.nan_to_num(img, nan=0.0), 0, 255).astype(np.uint8)
 cv2.imwrite("/home/user/NEW/floorplan/despachos-escritorios.jpg", out, [cv2.IMWRITE_JPEG_QUALITY, 92])
 cv2.imwrite("desks_small.jpg", cv2.resize(out, (1344, 1008), interpolation=cv2.INTER_AREA))
 print("ok", chair_top, chair_cut)
