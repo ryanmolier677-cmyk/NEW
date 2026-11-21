@@ -252,18 +252,18 @@ def W(img, p0, p1, q0, q1, z0, z1, seed, along="p"):
 def G(img, p0, p1, q0, q1, z0, z1):
     return box(img, p0, p1, q0, q1, z0, z1, kind="glass")
 
-# ---------- desk A: pushed to the back and to the right; wing on its left side ----------
-img = shadow(img, [P(1.60, 0.65), P(0.10, 0.65), P(0.10, 1.50), P(1.03, 1.50), P(1.03, 2.05), P(1.60, 2.05)], 0.33, 16)
-img = chair_base(img, 0.85, 0.33, leather)
-img = chair(img, 0.85, 0.33)
-img = G(img, 0.17, 0.185, 0.73, 1.42, 0.0, 0.70)                  # glass leg, right end
-img = W(img, 1.10, 1.53, 0.73, 1.97, 0.50, 0.70, 31, along="q")    # drawer box under top + wing
-img = W(img, 1.08, 1.55, 1.47, 2.00, 0.0, 0.06, 32, along="q")     # wing plinth
-img = G(img, 1.11, 1.52, 1.965, 1.98, 0.06, 0.50)                  # wing glass end
-img = W(img, 0.15, 1.55, 0.70, 1.45, 0.70, 0.75, 33)               # main top
-img = W(img, 1.08, 1.55, 1.45, 2.00, 0.70, 0.75, 34, along="q")    # wing top
-img = extrude(img, rect(0.82, 1.02, 0.32, 0.22, 0.06), 0.75, 0.768, (178, 180, 184), spec=0.3)
-img = books(img, 1.32, 1.78, 0.25, [(198, 214, 226), (78, 96, 92)])
+# ---------- desk A: L with the wing running back to the wall; chair sits inside the L ----------
+img = shadow(img, [P(1.60, 0.20), P(1.03, 0.20), P(1.03, 0.85), P(0.10, 0.85), P(0.10, 1.65), P(1.60, 1.65)], 0.33, 16)
+img = W(img, 1.08, 1.55, 0.25, 0.78, 0.0, 0.06, 32, along="q")     # wing plinth (back)
+img = G(img, 1.11, 1.52, 0.265, 0.28, 0.06, 0.50)                  # wing glass end (back)
+img = W(img, 1.10, 1.53, 0.28, 1.57, 0.50, 0.70, 31, along="q")    # drawer box under wing + main
+img = chair_base(img, 0.70, 0.50, leather)
+img = chair(img, 0.70, 0.50)
+img = G(img, 0.17, 0.185, 0.93, 1.57, 0.0, 0.70)                  # glass leg, right end
+img = W(img, 1.08, 1.55, 0.25, 0.90, 0.70, 0.75, 34, along="q")    # wing top
+img = W(img, 0.15, 1.55, 0.90, 1.60, 0.70, 0.75, 33)               # main top
+img = extrude(img, rect(0.72, 1.22, 0.32, 0.22, 0.06), 0.75, 0.768, (178, 180, 184), spec=0.3)
+img = books(img, 1.32, 0.55, 0.25, [(198, 214, 226), (78, 96, 92)])
 
 # ---------- desk B: same model, along the left side, chair on the wall side ----------
 img = shadow(img, [P(2.87, 0.30), P(2.15, 0.30), P(2.15, 1.60), P(3.35, 1.60), P(3.35, 1.00), P(2.87, 1.00)], 0.33, 16)
