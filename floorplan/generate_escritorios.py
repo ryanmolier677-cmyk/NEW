@@ -233,8 +233,8 @@ def put(img, spr_m, p, q, width_m, z=0.75, mirror=False):
 
 # ---------------- scene ----------------
 # rugs (layered)
-img = place_rug(img, rug1, 0.62, 2.30, 0.30, 2.30)
-img = place_rug(img, rug2, 1.95, 3.20, 0.15, 1.95)
+img = place_rug(img, rug1, 0.10, 1.95, 0.15, 1.58)
+img = place_rug(img, rug2, 1.95, 3.30, 0.15, 1.95)
 
 import math
 def rect(pc, qc, w, d, ang):
@@ -252,32 +252,32 @@ def W(img, p0, p1, q0, q1, z0, z1, seed, along="p"):
 def G(img, p0, p1, q0, q1, z0, z1):
     return box(img, p0, p1, q0, q1, z0, z1, kind="glass")
 
-# ---------- desk A (same model as your original, wing on the stair side): walnut top, glass leg, drawer + wing ----------
-img = shadow(img, [P(2.07, 0.80), P(0.57, 0.80), P(0.57, 2.22), P(1.12, 2.22), P(1.12, 1.68), P(2.07, 1.68)], 0.33, 16)
-img = chair_base(img, 1.42, 0.42, leather)
-img = chair(img, 1.42, 0.42)
-img = G(img, 1.985, 2.00, 0.88, 1.57, 0.0, 0.70)                 # glass leg, left end
-img = W(img, 0.64, 1.07, 0.88, 2.12, 0.50, 0.70, 31, along="q")    # long drawer box under top + wing
-img = W(img, 0.62, 1.07, 1.62, 2.15, 0.0, 0.06, 32, along="q")     # floor plinth of the wing
-img = G(img, 0.65, 1.04, 2.115, 2.13, 0.06, 0.50)                  # glass end of the wing
-img = W(img, 0.62, 2.02, 0.85, 1.60, 0.70, 0.75, 33)               # main top
-img = W(img, 0.62, 1.07, 1.60, 2.15, 0.70, 0.75, 34, along="q")    # wing top
-img = extrude(img, rect(1.45, 1.15, 0.32, 0.22, -0.06), 0.75, 0.768, (178, 180, 184), spec=0.3)
-img = books(img, 0.85, 1.92, -0.25, [(198, 214, 226), (78, 96, 92)])
+# ---------- desk A: pushed to the back and to the right; wing on its left side ----------
+img = shadow(img, [P(1.60, 0.65), P(0.10, 0.65), P(0.10, 1.50), P(1.03, 1.50), P(1.03, 2.05), P(1.60, 2.05)], 0.33, 16)
+img = chair_base(img, 0.85, 0.33, leather)
+img = chair(img, 0.85, 0.33)
+img = G(img, 0.17, 0.185, 0.73, 1.42, 0.0, 0.70)                  # glass leg, right end
+img = W(img, 1.10, 1.53, 0.73, 1.97, 0.50, 0.70, 31, along="q")    # drawer box under top + wing
+img = W(img, 1.08, 1.55, 1.47, 2.00, 0.0, 0.06, 32, along="q")     # wing plinth
+img = G(img, 1.11, 1.52, 1.965, 1.98, 0.06, 0.50)                  # wing glass end
+img = W(img, 0.15, 1.55, 0.70, 1.45, 0.70, 0.75, 33)               # main top
+img = W(img, 1.08, 1.55, 1.45, 2.00, 0.70, 0.75, 34, along="q")    # wing top
+img = extrude(img, rect(0.82, 1.02, 0.32, 0.22, 0.06), 0.75, 0.768, (178, 180, 184), spec=0.3)
+img = books(img, 1.32, 1.78, 0.25, [(198, 214, 226), (78, 96, 92)])
 
-# ---------- desk B: same model, along the left side; user sits on the wall side facing the room ----------
-img = shadow(img, [P(2.77, 0.30), P(2.05, 0.30), P(2.05, 1.60), P(3.25, 1.60), P(3.25, 1.00), P(2.77, 1.00)], 0.33, 16)
-img = G(img, 2.13, 2.69, 0.37, 0.385, 0.0, 0.70)                  # glass leg, back end
-img = W(img, 2.12, 2.70, 1.05, 1.53, 0.50, 0.70, 41)               # drawer under main top, near end
-img = W(img, 2.10, 2.72, 0.35, 1.55, 0.70, 0.75, 43, along="q")    # main top
-img = chair_base(img, 2.97, 0.76, leather)
-img = chair(img, 2.97, 0.76, mirror=False)
-img = W(img, 2.72, 3.20, 1.05, 1.55, 0.0, 0.06, 44)                # wing plinth
-img = W(img, 2.72, 3.18, 1.07, 1.53, 0.50, 0.70, 45)               # wing drawer
-img = G(img, 3.18, 3.195, 1.08, 1.52, 0.06, 0.50)                  # wing glass end
-img = W(img, 2.72, 3.20, 1.05, 1.55, 0.70, 0.75, 46)               # wing top
-img = books(img, 2.42, 1.30, 0.15, [(70, 98, 150), (200, 214, 224), (60, 70, 80)])
-img = vase(img, 2.40, 0.55)
+# ---------- desk B: same model, along the left side, chair on the wall side ----------
+img = shadow(img, [P(2.87, 0.30), P(2.15, 0.30), P(2.15, 1.60), P(3.35, 1.60), P(3.35, 1.00), P(2.87, 1.00)], 0.33, 16)
+img = G(img, 2.23, 2.79, 0.37, 0.385, 0.0, 0.70)
+img = W(img, 2.22, 2.80, 1.05, 1.53, 0.50, 0.70, 41)
+img = W(img, 2.20, 2.82, 0.35, 1.55, 0.70, 0.75, 43, along="q")
+img = chair_base(img, 3.07, 0.76, leather)
+img = chair(img, 3.07, 0.76)
+img = W(img, 2.82, 3.30, 1.05, 1.55, 0.0, 0.06, 44)
+img = W(img, 2.82, 3.28, 1.07, 1.53, 0.50, 0.70, 45)
+img = G(img, 3.28, 3.295, 1.08, 1.52, 0.06, 0.50)
+img = W(img, 2.82, 3.30, 1.05, 1.55, 0.70, 0.75, 46)
+img = books(img, 2.52, 1.30, 0.15, [(70, 98, 150), (200, 214, 224), (60, 70, 80)])
+img = vase(img, 2.50, 0.55)
 
 out = np.clip(np.nan_to_num(img, nan=0.0), 0, 255).astype(np.uint8)
 cv2.imwrite("/home/user/NEW/floorplan/despachos-escritorios.jpg", out, [cv2.IMWRITE_JPEG_QUALITY, 92])
